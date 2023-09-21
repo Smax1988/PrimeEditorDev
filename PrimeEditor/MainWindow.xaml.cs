@@ -1,19 +1,8 @@
 ﻿using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace PrimeEditor
 {
@@ -22,7 +11,7 @@ namespace PrimeEditor
     /// </summary>
     public partial class MainWindow : Window
     {
-        private string Filename { get; set; } = string.Empty;
+        private string FilePath { get; set; } = string.Empty;
 
         public MainWindow()
         {
@@ -37,7 +26,7 @@ namespace PrimeEditor
         private void NewFile(object sender, RoutedEventArgs e)
         {
             PrimeEditorText.Text = "";
-            Filename = string.Empty;
+            FilePath = string.Empty;
         }
 
         /// <summary>
@@ -53,7 +42,10 @@ namespace PrimeEditor
             {
                 PrimeEditorText.Text = File.ReadAllText(openFileDialog.FileName);
                 // save filename to local variable
-                Filename = openFileDialog.FileName;
+                FilePath = openFileDialog.FileName;
+
+                // Status Message
+                StatusMessage.Text = $"Datei {FilePath.Split('\\').Last()} wurde geöffnet.";
             }
         }
 
@@ -64,9 +56,10 @@ namespace PrimeEditor
         /// <param name="e"></param>
         private void SaveFile(object sender, RoutedEventArgs e)
         {
-            if(File.Exists(Filename))
+            if(File.Exists(FilePath))
             {
-                File.WriteAllText(Filename, PrimeEditorText.Text);
+                File.WriteAllText(FilePath, PrimeEditorText.Text);
+                StatusMessage.Text = $"Datei {FilePath.Split('\\').Last()} wurde gespeichert.";
             }
             else
             {
@@ -88,7 +81,9 @@ namespace PrimeEditor
             {
                 File.WriteAllText(saveFileDialog.FileName, PrimeEditorText.Text);
                 // save filename to local variable
-                Filename = saveFileDialog.FileName;
+                FilePath = saveFileDialog.FileName;
+
+                StatusMessage.Text = $"Datei {FilePath.Split('\\').Last()} wurde gespeichert.";
             }
         }
 

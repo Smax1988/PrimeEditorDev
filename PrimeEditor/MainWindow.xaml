@@ -6,9 +6,9 @@
         xmlns:local="clr-namespace:PrimeEditor"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-
-    <DockPanel>
-        <Menu DockPanel.Dock="Top" Height="25">
+    
+    <DockPanel Margin="0,0,0,-4">
+        <Menu DockPanel.Dock="Top">
             <MenuItem Header="File" Height="25">
                 <MenuItem Click="NewFile" Header="Neu"/>
                 <MenuItem Click="OpenFile" Header="Open"/>
@@ -16,7 +16,19 @@
                 <MenuItem Click="SaveFileAs" Header="Save As"/>
                 <MenuItem Click="CloseEditor" Header="Close"/>
             </MenuItem>
+            <MenuItem Header="Edit">
+                <MenuItem Header="Font Size"/>
+                <MenuItem Header="Font Color"/>
+                <MenuItem Header="Background Color"/>
+            </MenuItem>
         </Menu>
-        <TextBox AcceptsReturn="True" TextWrapping="NoWrap" Name="PrimeEditorText" Background="Black" Foreground="White"/>
+        <StatusBar Height="30" VerticalAlignment="Bottom" DockPanel.Dock="Bottom" Margin="0,0,10,0">
+            <StackPanel Orientation="Horizontal" Height="30">
+                <Label Name="StatusMessage" Width="200">asdjflökasjdfjsdf</Label>
+                <Label Name="WordCount" Width="100">3400</Label>
+                <Label Name="CharacterCount" Width="100">20000</Label>
+            </StackPanel>
+        </StatusBar>
+        <TextBox AcceptsReturn="True" TextWrapping="NoWrap" Name="PrimeEditorText" Background="Black" Foreground="White" HorizontalScrollBarVisibility="Auto" />
     </DockPanel>
 </Window>
