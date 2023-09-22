@@ -5,18 +5,34 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PrimeEditor"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    
+        Title="Prime Editor" Height="450" Width="800">
+    <Window.CommandBindings>
+        <!-- Define command bindings for your shortcuts -->
+        <CommandBinding Command="New" Executed="NewFile"/>
+        <CommandBinding Command="Open" Executed="OpenFile"/>
+        <CommandBinding Command="Save" Executed="SaveFile"/>
+        <CommandBinding Command="Close" Executed="CloseEditor"/>
+    </Window.CommandBindings>
+
+    <Window.InputBindings>
+        <!-- Bind the shortcuts to the commands -->
+        <KeyBinding Key="N" Modifiers="Ctrl" Command="New"/>
+        <KeyBinding Key="O" Modifiers="Ctrl" Command="Open"/>
+        <KeyBinding Key="S" Modifiers="Ctrl" Command="Save"/>
+        <KeyBinding Key="Q" Modifiers="Ctrl" Command="Close"/>
+    </Window.InputBindings>
+
     <DockPanel Margin="0,0,0,-4">
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="File" Height="25">
-                <MenuItem Click="NewFile" Header="Neu"/>
-                <MenuItem Click="OpenFile" Header="Open"/>
-                <MenuItem Click="SaveFile" Header="Save"/>
+                <MenuItem Click="NewFile" Header="Neu" InputGestureText="Ctrl+N"/>
+                <MenuItem Click="OpenFile" Header="Open" InputGestureText="Ctrl+O"/>
+                <MenuItem Click="SaveFile" Header="Save" InputGestureText="Ctrl+S"/>
                 <MenuItem Click="SaveFileAs" Header="Save As"/>
-                <MenuItem Click="CloseEditor" Header="Close"/>
+                <MenuItem Click="CloseEditor" Header="Close" InputGestureText="Ctrl+Q"/>
             </MenuItem>
             <MenuItem Header="Edit">
+                <MenuItem Header="Text Wrapping"/>
                 <MenuItem Header="Font Size"/>
                 <MenuItem Header="Font Color"/>
                 <MenuItem Header="Background Color"/>
@@ -24,11 +40,11 @@
         </Menu>
         <StatusBar Height="30" VerticalAlignment="Bottom" DockPanel.Dock="Bottom" Margin="0,0,10,0">
             <StackPanel Orientation="Horizontal" Height="30">
-                <Label Name="StatusMessage" Width="200">asdjflökasjdfjsdf</Label>
-                <Label Name="WordCount" Width="100">3400</Label>
-                <Label Name="CharacterCount" Width="100">20000</Label>
+                <Label Name="StatusMessage" Width="200"></Label>
+                <Label Name="WordCount" Width="100">Wörter: </Label>
+                <Label Name="CharacterCount" Width="100">Zeichen: </Label>
             </StackPanel>
         </StatusBar>
-        <TextBox AcceptsReturn="True" TextWrapping="NoWrap" Name="PrimeEditorText" Background="Black" Foreground="White" HorizontalScrollBarVisibility="Auto" />
+        <TextBox AcceptsReturn="True" TextWrapping="NoWrap" FontSize="16" Name="PrimeEditorText" Background="Black" Foreground="White" HorizontalScrollBarVisibility="Auto" TextChanged="OnTextChanged" />
     </DockPanel>
 </Window>

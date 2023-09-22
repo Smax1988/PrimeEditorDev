@@ -2,7 +2,9 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace PrimeEditor
 {
@@ -12,11 +14,14 @@ namespace PrimeEditor
     public partial class MainWindow : Window
     {
         private string FilePath { get; set; } = string.Empty;
+        private bool TextWrapping { get; set; } = true;
 
         public MainWindow()
         {
+            this.Title = "Prime Editor";
             InitializeComponent();
         }
+
         /// <summary>
         /// Open a new Editor
         /// </summary>
@@ -86,6 +91,26 @@ namespace PrimeEditor
             }
         }
 
+        private void OnTextChanged(object sender, TextChangedEventArgs args)
+        {
+            CharacterCount.Content = "Zeichen: " + CountCharacters();
+            WordCount.Content = "Wörter: " + CountWords();
+        }
+
+        private string CountCharacters()
+        {
+            return PrimeEditorText.Text.Length.ToString();
+        }
+
+        private string CountWords()
+        {
+            string text = PrimeEditorText.Text.Trim();
+            string pattern = @"[\s.,;()\[\]'" + "\"?!]+|\t|\n";
+            string[] words = Regex.Split(text, pattern);
+
+            return words.Length.ToString();
+        }
+
         /// <summary>
         /// Close the Editor
         /// </summary>
@@ -94,6 +119,11 @@ namespace PrimeEditor
         private void CloseEditor(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void New_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
+        {
+
         }
     }
 }
