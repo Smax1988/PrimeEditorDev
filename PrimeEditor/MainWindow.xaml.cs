@@ -17,7 +17,6 @@ namespace PrimeEditor
         {
             InitializeComponent();
         }
-
         /// <summary>
         /// Open a new Editor
         /// </summary>
@@ -37,7 +36,7 @@ namespace PrimeEditor
         private void OpenFile(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Text file (*.txt)|*.txt";
+            openFileDialog.Filter = "Text file (*.txt)|*.txt|C# file(*.cs)|*.cs\"";
             if (openFileDialog.ShowDialog() == true)
             {
                 PrimeEditorText.Text = File.ReadAllText(openFileDialog.FileName);
@@ -45,7 +44,7 @@ namespace PrimeEditor
                 FilePath = openFileDialog.FileName;
 
                 // Status Message
-                StatusMessage.Text = $"Datei {FilePath.Split('\\').Last()} wurde geöffnet.";
+                StatusMessage.Content = $"Datei '{FilePath.Split('\\').Last()}' wurde geöffnet.";
             }
         }
 
@@ -56,15 +55,15 @@ namespace PrimeEditor
         /// <param name="e"></param>
         private void SaveFile(object sender, RoutedEventArgs e)
         {
-            if(File.Exists(FilePath))
+            if (File.Exists(FilePath))
             {
                 File.WriteAllText(FilePath, PrimeEditorText.Text);
-                StatusMessage.Text = $"Datei {FilePath.Split('\\').Last()} wurde gespeichert.";
+                StatusMessage.Content = $"Datei '{FilePath.Split('\\').Last()}' wurde gespeichert.";
             }
             else
             {
                 SaveFileAs(sender, e);
-            }  
+            }
         }
 
         /// <summary>
@@ -75,7 +74,7 @@ namespace PrimeEditor
         private void SaveFileAs(object sender, RoutedEventArgs e)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "Text file (*.txt)|*.txt";
+            saveFileDialog.Filter = "Text file (*.txt)|*.txt|C# file(*.cs)|*.cs";
             saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             if (saveFileDialog.ShowDialog() == true)
             {
@@ -83,7 +82,7 @@ namespace PrimeEditor
                 // save filename to local variable
                 FilePath = saveFileDialog.FileName;
 
-                StatusMessage.Text = $"Datei {FilePath.Split('\\').Last()} wurde gespeichert.";
+                StatusMessage.Content = $"Datei '{FilePath.Split('\\').Last()}' wurde gespeichert.";
             }
         }
 
