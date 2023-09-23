@@ -38,23 +38,37 @@ namespace PrimeEditor
             MessageBoxImage icon = MessageBoxImage.Question;
             MessageBoxResult result;
 
-            result = MessageBox.Show(messageBoxText, caption, button, icon, MessageBoxResult.Yes);
+            string editorText = PrimeEditorText.Text;
+            string fileText = string.Empty;
+            
+            if (FilePath != string.Empty)
+                fileText = File.ReadAllText(FilePath);
 
-            switch (result)
+            if (editorText != fileText)
             {
-                case MessageBoxResult.Yes:
-                    SaveFile(sender, e);
-                    PrimeEditorText.Text = "";
-                    FilePath = string.Empty;
-                    break;
-                case MessageBoxResult.No:
-                    PrimeEditorText.Text = "";
-                    FilePath = string.Empty;
-                    break;
-                case MessageBoxResult.Cancel:
-                    break;
-                default:
-                    break;
+                result = MessageBox.Show(messageBoxText, caption, button, icon, MessageBoxResult.Yes);
+
+                switch (result)
+                {
+                    case MessageBoxResult.Yes:
+                        SaveFile(sender, e);
+                        PrimeEditorText.Text = "";
+                        FilePath = string.Empty;
+                        break;
+                    case MessageBoxResult.No:
+                        PrimeEditorText.Text = "";
+                        FilePath = string.Empty;
+                        break;
+                    case MessageBoxResult.Cancel:
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                PrimeEditorText.Text = "";
+                FilePath = string.Empty;
             }
         }
 

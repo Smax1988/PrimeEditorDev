@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PrimeEditor"
         mc:Ignorable="d"
-        Title="Prime Editor" Height="450" Width="800">
+        Title="Prime Editor" Height="450" Width="900">
 
     <Window.CommandBindings>
         <!-- Define command bindings for your shortcuts -->
@@ -40,14 +40,14 @@
             </MenuItem>
         </Menu>
         <StatusBar Height="30" VerticalAlignment="Bottom" DockPanel.Dock="Bottom" Background="#333333">
-            <StackPanel Orientation="Horizontal" Height="30" VerticalAlignment="Center" Width="450">
-                <Label Name="StatusMessage" Width="450" BorderBrush="White" Foreground="White"></Label>
+            <StackPanel Orientation="Horizontal" Height="30" VerticalAlignment="Center" Width="400">
+                <Label Name="StatusMessage" Width="400" BorderBrush="White" Foreground="White" VerticalAlignment="Center" Height="30" HorizontalAlignment="Left" />
             </StackPanel>
-            <StackPanel Height="30" VerticalAlignment="Center" HorizontalAlignment="Right" Orientation="Horizontal" Width="340">
-                <Label Name="WordCount" Width="170" BorderBrush="White" Foreground="White" VerticalAlignment="Center">Words:</Label>
-                <Label Name="CharacterCount" Width="170" BorderBrush="White" Foreground="White">Characters:</Label>
+            <StackPanel Height="30" VerticalAlignment="Center" HorizontalAlignment="Right" Orientation="Horizontal" Width="380" >
+                <Label Name="WordCount" Width="170" BorderBrush="White" Foreground="White" VerticalAlignment="Center" Margin="0,0,5,0">Words:</Label>
+                <Label Name="CharacterCount" Width="170" BorderBrush="White" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center">Characters:</Label>
             </StackPanel>
         </StatusBar>
-        <TextBox AcceptsReturn="True" TextWrapping="NoWrap" FontSize="16" Name="PrimeEditorText" Background="Black" Foreground="White" HorizontalScrollBarVisibility="Auto" TextChanged="OnTextChanged" />
+        <TextBox AcceptsReturn="True" TextWrapping="NoWrap" FontSize="16" Padding="5,10,0,5" Name="PrimeEditorText" Background="Black" Foreground="White" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" TextChanged="OnTextChanged" />
     </DockPanel>
 </Window>
