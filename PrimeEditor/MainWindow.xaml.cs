@@ -52,24 +52,22 @@ namespace PrimeEditor
                 {
                     case MessageBoxResult.Yes:
                         SaveFile(sender, e);
-                        PrimeEditorText.Text = "";
-                        FilePath = string.Empty;
+                        ResetEditor();
                         break;
                     case MessageBoxResult.No:
-                        PrimeEditorText.Text = "";
-                        FilePath = string.Empty;
-                        break;
-                    case MessageBoxResult.Cancel:
+                        ResetEditor();
                         break;
                     default:
                         break;
                 }
             }
-            else
-            {
-                PrimeEditorText.Text = "";
-                FilePath = string.Empty;
-            }
+            else ResetEditor();
+        }
+
+        private void ResetEditor()
+        {
+            PrimeEditorText.Text = "";
+            FilePath = string.Empty;
         }
 
         /// <summary>
