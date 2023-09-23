@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:PrimeEditor"
         mc:Ignorable="d"
         Title="Prime Editor" Height="450" Width="800">
+
     <Window.CommandBindings>
         <!-- Define command bindings for your shortcuts -->
         <CommandBinding Command="New" Executed="NewFile"/>
@@ -23,26 +24,28 @@
     </Window.InputBindings>
 
     <DockPanel Margin="0,0,0,-4">
-        <Menu DockPanel.Dock="Top">
-            <MenuItem Header="File" Height="25">
-                <MenuItem Click="NewFile" Header="Neu" InputGestureText="Ctrl+N"/>
-                <MenuItem Click="OpenFile" Header="Open" InputGestureText="Ctrl+O"/>
-                <MenuItem Click="SaveFile" Header="Save" InputGestureText="Ctrl+S"/>
-                <MenuItem Click="SaveFileAs" Header="Save As"/>
-                <MenuItem Click="CloseEditor" Header="Close" InputGestureText="Ctrl+Q"/>
+        <Menu DockPanel.Dock="Top" Background="#333333" Foreground="White" BorderBrush="#333333">
+            <MenuItem Header="File" Height="25"  BorderBrush="#333333">
+                <MenuItem Click="NewFile" Header="Neu" InputGestureText="Ctrl+N" Background="#333333" BorderBrush="#333333"/>
+                <MenuItem Click="OpenFile" Header="Open" InputGestureText="Ctrl+O" Background="#333333"  BorderBrush="#333333"/>
+                <MenuItem Click="SaveFile" Header="Save" InputGestureText="Ctrl+S" Background="#333333"  BorderBrush="#333333"/>
+                <MenuItem Click="SaveFileAs" Header="Save As" Background="#333333"  BorderBrush="#333333"/>
+                <MenuItem Click="CloseEditor" Header="Close" InputGestureText="Alt+F4" Background="#333333"  BorderBrush="#333333"/>
             </MenuItem>
-            <MenuItem Header="Edit">
-                <MenuItem Header="Text Wrapping"/>
-                <MenuItem Header="Font Size"/>
-                <MenuItem Header="Font Color"/>
-                <MenuItem Header="Background Color"/>
+            <MenuItem Header="Edit"  BorderBrush="#333333">
+                <MenuItem Header="Text Wrapping" Background="#333333" BorderBrush="#333333"/>
+                <MenuItem Header="Font Size" Background="#333333" BorderBrush="#333333"/>
+                <MenuItem Header="Font Color" Background="#333333" BorderBrush="#333333"/>
+                <MenuItem Header="Background Color" Background="#333333" BorderBrush="#333333"/>
             </MenuItem>
         </Menu>
-        <StatusBar Height="30" VerticalAlignment="Bottom" DockPanel.Dock="Bottom" Margin="0,0,10,0">
-            <StackPanel Orientation="Horizontal" Height="30">
-                <Label Name="StatusMessage" Width="200"></Label>
-                <Label Name="WordCount" Width="100">Wörter: </Label>
-                <Label Name="CharacterCount" Width="100">Zeichen: </Label>
+        <StatusBar Height="30" VerticalAlignment="Bottom" DockPanel.Dock="Bottom" Background="#333333">
+            <StackPanel Orientation="Horizontal" Height="30" VerticalAlignment="Center" Width="450">
+                <Label Name="StatusMessage" Width="450" BorderBrush="White" Foreground="White"></Label>
+            </StackPanel>
+            <StackPanel Height="30" VerticalAlignment="Center" HorizontalAlignment="Right" Orientation="Horizontal" Width="340">
+                <Label Name="WordCount" Width="170" BorderBrush="White" Foreground="White" VerticalAlignment="Center">Words:</Label>
+                <Label Name="CharacterCount" Width="170" BorderBrush="White" Foreground="White">Characters:</Label>
             </StackPanel>
         </StatusBar>
         <TextBox AcceptsReturn="True" TextWrapping="NoWrap" FontSize="16" Name="PrimeEditorText" Background="Black" Foreground="White" HorizontalScrollBarVisibility="Auto" TextChanged="OnTextChanged" />

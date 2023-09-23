@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 
 namespace PrimeEditor
 {
@@ -18,8 +19,10 @@ namespace PrimeEditor
 
         public MainWindow()
         {
-            this.Title = "Prime Editor";
             InitializeComponent();
+
+            // Set Main Window Icon
+            Icon = new BitmapImage(new Uri("../../../Images/edit_text_icon.png", UriKind.RelativeOrAbsolute));
         }
 
         /// <summary>
@@ -29,8 +32,30 @@ namespace PrimeEditor
         /// <param name="e"></param>
         private void NewFile(object sender, RoutedEventArgs e)
         {
-            PrimeEditorText.Text = "";
-            FilePath = string.Empty;
+            string messageBoxText = "You have unsaved changes. Do you wish to save the file?";
+            string caption = "Save";
+            MessageBoxButton button = MessageBoxButton.YesNoCancel;
+            MessageBoxImage icon = MessageBoxImage.Question;
+            MessageBoxResult result;
+
+            result = MessageBox.Show(messageBoxText, caption, button, icon, MessageBoxResult.Yes);
+
+            switch (result)
+            {
+                case MessageBoxResult.Yes:
+                    SaveFile(sender, e);
+                    PrimeEditorText.Text = "";
+                    FilePath = string.Empty;
+                    break;
+                case MessageBoxResult.No:
+                    PrimeEditorText.Text = "";
+                    FilePath = string.Empty;
+                    break;
+                case MessageBoxResult.Cancel:
+                    break;
+                default:
+                    break;
+            }
         }
 
         /// <summary>
@@ -105,6 +130,8 @@ namespace PrimeEditor
         private string CountWords()
         {
             string text = PrimeEditorText.Text.Trim();
+            if (text.Length == 0)
+                return "0";
             string pattern = @"[\s.,;()\[\]'" + "\"?!]+|\t|\n";
             string[] words = Regex.Split(text, pattern);
 
