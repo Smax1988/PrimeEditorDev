@@ -224,18 +224,20 @@ namespace PrimeEditor
             SearchBar.Text = "Search...";
         }
 
-        private void SearchText(string text, string searchString)
+        private string[] SearchText(string text, string searchString)
         {
             string[] words = GetWords(text);
+            string[] result = new string[words.Length];
 
-            foreach(string word in words)
+            for (int i = 0; i < words.Length; i++)
             {
-                if (word.Trim() == searchString.Trim())
+                if (words[i].Trim() == searchString.Trim())
                 {
-
+                    result[i] = words[i];
                 }
-
             }
+
+            return result;
         }
     }
 }
