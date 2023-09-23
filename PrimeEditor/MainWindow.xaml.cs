@@ -15,7 +15,7 @@ namespace PrimeEditor
     public partial class MainWindow : Window
     {
         private string FilePath { get; set; } = string.Empty;
-        private bool TextWrapping { get; set; } = true;
+        private bool TextWrapping { get; set; } = false;
 
         public MainWindow()
         {
@@ -30,7 +30,7 @@ namespace PrimeEditor
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void NewFile(object sender, RoutedEventArgs e)
+        private void NewFile_Click(object sender, RoutedEventArgs e)
         {
             string messageBoxText = "You have unsaved changes. Do you wish to save the file?";
             string caption = "Save";
@@ -51,7 +51,7 @@ namespace PrimeEditor
                 switch (result)
                 {
                     case MessageBoxResult.Yes:
-                        SaveFile(sender, e);
+                        SaveFile_Click(sender, e);
                         ResetEditor();
                         break;
                     case MessageBoxResult.No:
@@ -69,7 +69,7 @@ namespace PrimeEditor
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OpenFile(object sender, RoutedEventArgs e)
+        private void OpenFile_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Text file (*.txt)|*.txt|C# file(*.cs)|*.cs\"";
@@ -89,7 +89,7 @@ namespace PrimeEditor
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void SaveFile(object sender, RoutedEventArgs e)
+        private void SaveFile_Click(object sender, RoutedEventArgs e)
         {
             if (File.Exists(FilePath))
             {
@@ -98,7 +98,7 @@ namespace PrimeEditor
             }
             else
             {
-                SaveFileAs(sender, e);
+                SaveFileAs_Click(sender, e);
             }
         }
 
@@ -107,7 +107,7 @@ namespace PrimeEditor
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void SaveFileAs(object sender, RoutedEventArgs e)
+        private void SaveFileAs_Click(object sender, RoutedEventArgs e)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "Text file (*.txt)|*.txt|C# file(*.cs)|*.cs";
@@ -174,9 +174,44 @@ namespace PrimeEditor
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void CloseEditor(object sender, RoutedEventArgs e)
+        private void CloseEditor_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+
+        /// <summary>
+        /// Change the Text Wrap of TextBox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TextWrap_Click(object sender, RoutedEventArgs e)
+        {
+            if (TextWrapping)
+            {
+                PrimeEditorText.TextWrapping = System.Windows.TextWrapping.NoWrap;
+                TextWrapping = false;
+                TextWrap.Header = "Enable Text Wrapping";
+            }
+            else
+            {
+                PrimeEditorText.TextWrapping = System.Windows.TextWrapping.Wrap;
+                TextWrapping = true;
+                TextWrap.Header = "Disable Text Wrapping";
+
+            }
+        }
+
+        private void SearchBar_GotFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox searchBar = (TextBox)sender;
+            searchBar.Text = "";
+        }
+
+        private void SearchBar_LostFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox searchBar = (TextBox)sender;
+            searchBar.Text = "Search...";
         }
     }
 }

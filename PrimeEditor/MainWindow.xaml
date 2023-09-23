@@ -9,10 +9,10 @@
 
     <Window.CommandBindings>
         <!-- Define command bindings for your shortcuts -->
-        <CommandBinding Command="New" Executed="NewFile"/>
-        <CommandBinding Command="Open" Executed="OpenFile"/>
-        <CommandBinding Command="Save" Executed="SaveFile"/>
-        <CommandBinding Command="Close" Executed="CloseEditor"/>
+        <CommandBinding Command="New" Executed="NewFile_Click"/>
+        <CommandBinding Command="Open" Executed="OpenFile_Click"/>
+        <CommandBinding Command="Save" Executed="SaveFile_Click"/>
+        <CommandBinding Command="Close" Executed="CloseEditor_Click"/>
     </Window.CommandBindings>
 
     <Window.InputBindings>
@@ -26,18 +26,21 @@
     <DockPanel Margin="0,0,0,-4">
         <Menu DockPanel.Dock="Top" Background="#333333" Foreground="White" BorderBrush="#333333">
             <MenuItem Header="File" Height="25"  BorderBrush="#333333">
-                <MenuItem Click="NewFile" Header="Neu" InputGestureText="Ctrl+N" Background="#333333" BorderBrush="#333333"/>
-                <MenuItem Click="OpenFile" Header="Open" InputGestureText="Ctrl+O" Background="#333333"  BorderBrush="#333333"/>
-                <MenuItem Click="SaveFile" Header="Save" InputGestureText="Ctrl+S" Background="#333333"  BorderBrush="#333333"/>
-                <MenuItem Click="SaveFileAs" Header="Save As" Background="#333333"  BorderBrush="#333333"/>
-                <MenuItem Click="CloseEditor" Header="Close" InputGestureText="Alt+F4" Background="#333333"  BorderBrush="#333333"/>
+                <MenuItem Click="NewFile_Click" Header="Neu" InputGestureText="Ctrl+N" Background="#333333" BorderBrush="#333333"/>
+                <MenuItem Click="OpenFile_Click" Header="Open" InputGestureText="Ctrl+O" Background="#333333"  BorderBrush="#333333"/>
+                <MenuItem Click="SaveFile_Click" Header="Save" InputGestureText="Ctrl+S" Background="#333333"  BorderBrush="#333333"/>
+                <MenuItem Click="SaveFileAs_Click" Header="Save As" Background="#333333"  BorderBrush="#333333"/>
+                <MenuItem Click="CloseEditor_Click" Header="Close" InputGestureText="Alt+F4" Background="#333333"  BorderBrush="#333333"/>
             </MenuItem>
             <MenuItem Header="Edit"  BorderBrush="#333333">
-                <MenuItem Header="Text Wrapping" Background="#333333" BorderBrush="#333333"/>
                 <MenuItem Header="Font Size" Background="#333333" BorderBrush="#333333"/>
                 <MenuItem Header="Font Color" Background="#333333" BorderBrush="#333333"/>
                 <MenuItem Header="Background Color" Background="#333333" BorderBrush="#333333"/>
             </MenuItem>
+            <MenuItem Header="View" BorderBrush="#333333">
+                <MenuItem Click="TextWrap_Click" Header="Enable Text Wrapping" Name="TextWrap" Background="#333333" BorderBrush="#333333"/>
+            </MenuItem>
+            <TextBox Name="SearchBar" GotFocus="SearchBar_GotFocus" LostFocus="SearchBar_LostFocus" Background="White" Foreground="Black" Width="200" HorizontalAlignment="Right" Margin="50,0,0,0">Search...</TextBox>
         </Menu>
         <StatusBar Height="30" VerticalAlignment="Bottom" DockPanel.Dock="Bottom" Background="#333333">
             <StackPanel Orientation="Horizontal" Height="30" VerticalAlignment="Center" Width="400">
