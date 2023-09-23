@@ -5,7 +5,9 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace PrimeEditor
 {
@@ -128,7 +130,7 @@ namespace PrimeEditor
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
-        private void OnTextChanged(object sender, TextChangedEventArgs args)
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs args)
         {
             CharacterCount.Content = "Zeichen: " + CountCharacters();
             WordCount.Content = "Wörter: " + CountWords();
@@ -152,12 +154,22 @@ namespace PrimeEditor
         private string CountWords()
         {
             string text = PrimeEditorText.Text.Trim();
-            if (text.Length == 0)
-                return "0";
-            string pattern = @"[\s.,;()\[\]'" + "\"?!]+|\t|\n";
-            string[] words = Regex.Split(text, pattern);
+            string[] words = GetWords(text);
 
             return words.Length.ToString();
+        }
+
+        /// <summary>
+        /// Gets the words from text
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns>array of all words</returns>
+        private static string[] GetWords(string text)
+        {
+            if (text.Length == 0)
+                return Array.Empty<string>();
+            string pattern = @"[\s.,;()\[\]'" + "\"?!]+|\t|\n";
+            return Regex.Split(text, pattern);
         }
 
         /// <summary>
@@ -198,7 +210,6 @@ namespace PrimeEditor
                 PrimeEditorText.TextWrapping = System.Windows.TextWrapping.Wrap;
                 TextWrapping = true;
                 TextWrap.Header = "Disable Text Wrapping";
-
             }
         }
 
@@ -208,10 +219,23 @@ namespace PrimeEditor
             searchBar.Text = "";
         }
 
-        private void SearchBar_LostFocus(object sender, RoutedEventArgs e)
+        private void Searchbar_FocusLost(object sender, KeyboardFocusChangedEventArgs e)
         {
-            TextBox searchBar = (TextBox)sender;
-            searchBar.Text = "Search...";
+            SearchBar.Text = "Search...";
+        }
+
+        private void SearchText(string text, string searchString)
+        {
+            string[] words = GetWords(text);
+
+            foreach(string word in words)
+            {
+                if (word.Trim() == searchString.Trim())
+                {
+
+                }
+
+            }
         }
     }
 }

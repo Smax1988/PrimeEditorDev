@@ -40,7 +40,8 @@
             <MenuItem Header="View" BorderBrush="#333333">
                 <MenuItem Click="TextWrap_Click" Header="Enable Text Wrapping" Name="TextWrap" Background="#333333" BorderBrush="#333333"/>
             </MenuItem>
-            <TextBox Name="SearchBar" GotFocus="SearchBar_GotFocus" LostFocus="SearchBar_LostFocus" Background="White" Foreground="Black" Width="200" HorizontalAlignment="Right" Margin="50,0,0,0">Search...</TextBox>
+            <TextBox Name="SearchBar" GotFocus="SearchBar_GotFocus" Background="White" Foreground="Black" Width="200" Margin="50,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Right" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" UseLayoutRounding="False" LostKeyboardFocus="Searchbar_FocusLost" TextAlignment="Justify">Search...</TextBox>
+
         </Menu>
         <StatusBar Height="30" VerticalAlignment="Bottom" DockPanel.Dock="Bottom" Background="#333333">
             <StackPanel Orientation="Horizontal" Height="30" VerticalAlignment="Center" Width="400">
@@ -51,6 +52,6 @@
                 <Label Name="CharacterCount" Width="170" BorderBrush="White" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center">Characters:</Label>
             </StackPanel>
         </StatusBar>
-        <TextBox AcceptsReturn="True" TextWrapping="NoWrap" FontSize="16" Padding="5,10,0,5" Name="PrimeEditorText" Background="Black" Foreground="White" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" TextChanged="OnTextChanged" />
+        <TextBox AcceptsReturn="True" TextWrapping="NoWrap" FontSize="16" Padding="5,10,0,5" Name="PrimeEditorText" Background="Black" Foreground="White" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" TextChanged="TextBox_TextChanged" />
     </DockPanel>
 </Window>
