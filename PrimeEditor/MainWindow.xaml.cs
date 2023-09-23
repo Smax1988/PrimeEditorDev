@@ -64,12 +64,6 @@ namespace PrimeEditor
             else ResetEditor();
         }
 
-        private void ResetEditor()
-        {
-            PrimeEditorText.Text = "";
-            FilePath = string.Empty;
-        }
-
         /// <summary>
         /// Open a txt file
         /// </summary>
@@ -128,17 +122,33 @@ namespace PrimeEditor
             }
         }
 
+
+        /// <summary>
+        /// Event Handler for when the text in TextBox changes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
         private void OnTextChanged(object sender, TextChangedEventArgs args)
         {
             CharacterCount.Content = "Zeichen: " + CountCharacters();
             WordCount.Content = "Wörter: " + CountWords();
         }
 
+
+        /// <summary>
+        /// Count the Number of Characters
+        /// </summary>
+        /// <returns></returns>
         private string CountCharacters()
         {
             return PrimeEditorText.Text.Length.ToString();
         }
 
+
+        /// <summary>
+        /// Count the number of words
+        /// </summary>
+        /// <returns></returns>
         private string CountWords()
         {
             string text = PrimeEditorText.Text.Trim();
@@ -151,6 +161,15 @@ namespace PrimeEditor
         }
 
         /// <summary>
+        /// Resets the TextBox and FilePath
+        /// </summary>
+        private void ResetEditor()
+        {
+            PrimeEditorText.Text = "";
+            FilePath = string.Empty;
+        }
+
+        /// <summary>
         /// Close the Editor
         /// </summary>
         /// <param name="sender"></param>
@@ -158,11 +177,6 @@ namespace PrimeEditor
         private void CloseEditor(object sender, RoutedEventArgs e)
         {
             this.Close();
-        }
-
-        private void New_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
-        {
-
         }
     }
 }
