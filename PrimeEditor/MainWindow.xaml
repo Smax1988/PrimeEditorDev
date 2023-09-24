@@ -35,8 +35,9 @@
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="{Binding}" />
 
-                            <Button Width="16" Height="16" Margin="5,0,0,0" Click="CloseTab_Click">
-                                <Image Source="Images/close-button_sm.png" Width="16" Height="16" />
+                            <Button Width="16" Height="16" Background="#ededed" BorderThickness="0" Margin="5,0,0,0" Click="CloseTab_Click">
+                                X
+                                <!--<Image Source="Images/close-button-sm.png" Width="16" Height="16" />-->
                             </Button>
                         </StackPanel>
                     </DataTemplate>

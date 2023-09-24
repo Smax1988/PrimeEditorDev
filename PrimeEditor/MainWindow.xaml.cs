@@ -257,8 +257,15 @@ namespace PrimeEditor
         /// <param name="e"></param>
         private void CloseEditor_Click(object sender, RoutedEventArgs e)
         {
-            //TODO: Unsaved changes?
-            this.Close();
+            var result = MessageBox.Show("Unsaved Progress will be lost. Do you wish to proceed?", string.Empty, MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            switch(result)
+            {
+                case MessageBoxResult.Yes:
+                    this.Close();
+                    break;
+                default:
+                    break;
+            }
         }
 
         /// <summary>
