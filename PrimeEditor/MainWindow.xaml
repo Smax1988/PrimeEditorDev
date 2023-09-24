@@ -75,7 +75,7 @@
             <MenuItem Header="View" BorderBrush="#333333">
                 <MenuItem Click="TextWrap_Click" Header="Enable Text Wrapping" Name="TextWrap" Background="#333333" BorderBrush="#333333"/>
             </MenuItem>
-            <TextBox Name="SearchBar" Background="White" Foreground="Black" Width="200" Margin="50,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Right" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" UseLayoutRounding="False" TextAlignment="Justify"/>
+            <!--<TextBox Name="SearchBar" Background="White" Foreground="Black" Width="200" Margin="50,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Right" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" UseLayoutRounding="False" TextAlignment="Justify"/>-->
         </Menu>
 
         <StatusBar Height="30" VerticalAlignment="Bottom" DockPanel.Dock="Bottom" Background="#333333">
@@ -87,13 +87,10 @@
                 <Label Name="CharacterCount" Width="170" BorderBrush="White" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center">Characters:</Label>
             </StackPanel>
         </StatusBar>
-
-        <TabControl x:Name="tabControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <!--<TabItem Header="New Tab" Tag="0" Style="{StaticResource CloseableTabItemStyle}">
-                <TextBox AcceptsReturn="True" Tag="0" TextWrapping="NoWrap" FontSize="16" Padding="5,10,0,5" Background="Black" Foreground="White" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" TextChanged="TextBox_TextChanged" />
+        <!--SelectionChanged="TabControl_SelectionChanged"-->
+        <TabControl x:Name="tabControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+            <!--<TabItem Header="+" Style="{StaticResource CustomTabItemStyle}" MouseLeftButtonUp="AddNewTab_Click">
             </TabItem>-->
-            <TabItem Header="+" Style="{StaticResource CustomTabItemStyle}" MouseLeftButtonUp="AddNewTab_Click">
-            </TabItem>
         </TabControl>
     </DockPanel>
 </Window>
