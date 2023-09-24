@@ -27,12 +27,12 @@ namespace PrimeEditor
             CreateAddNewTabButton();
 
             // Set Main Window Icon
-            Icon = new BitmapImage(new Uri("../../../Images/edit_text_icon.png", UriKind.RelativeOrAbsolute));
+            Icon = new BitmapImage(new Uri("../../../Images/edit_text_icon_helix.png", UriKind.RelativeOrAbsolute));
             
             // Init timer for StausMessage disappearance
             messageTimer = new DispatcherTimer();
             messageTimer.Interval = TimeSpan.FromSeconds(3);
-            messageTimer.Tick += MessageTimer_Tick;
+            messageTimer.Tick += MessageTimer_Tick!;
         }
 
         /// <summary>
