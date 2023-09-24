@@ -24,7 +24,6 @@ namespace PrimeEditor
         {
             InitializeComponent();
             CreateAddNewTabButton();
-            //CreateNewTab();
 
             // Set Main Window Icon
             Icon = new BitmapImage(new Uri("../../../Images/edit_text_icon.png", UriKind.RelativeOrAbsolute));
@@ -40,8 +39,21 @@ namespace PrimeEditor
             CreateNewTab();
         }
 
+        private bool ItemIsOpened(string fileName)
+        {
+            ItemCollection tabControlItems = tabControl.Items;
+            foreach (var item in tabControlItems)
+            {
+                if ((string)((TabItem)item).Header == fileName)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         /// <summary>
-        /// Open a txt file
+        /// Open a .txt or .cs file
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -49,8 +61,18 @@ namespace PrimeEditor
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Text file (*.txt)|*.txt|C# file(*.cs)|*.cs\"";
+
             if (openFileDialog.ShowDialog() == true)
             {
+                string fileName = openFileDialog.FileName.Split('\\').Last();
+
+                if (ItemIsOpened(fileName))
+                {
+                    MessageBox.Show($"The file '{fileName}' is already opened.", string.Empty, MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
+
+
                 PrimeEditorFile file = new PrimeEditorFile();
                 file.FilePath = openFileDialog.FileName;
                 file.Content = File.ReadAllText(file.FilePath);
@@ -68,7 +90,7 @@ namespace PrimeEditor
         }
 
         /// <summary>
-        /// Saves an already opened 
+        /// Saves an already opened file or navigates to "Save As" method
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -80,8 +102,10 @@ namespace PrimeEditor
 
             if (textBox != null)
             {
+                string filePath = ((TextBoxData)textBox.Tag).FilePath;
+                AddFilePathToTab(filePath);
 
-                file.FilePath = ((TextBoxData)textBox.Tag).FilePath;
+                file.FilePath = filePath;
                 file.Content = textBox.Text;
 
                 if (File.Exists(file.FilePath))
@@ -97,7 +121,7 @@ namespace PrimeEditor
         }
 
         /// <summary>
-        /// Save the text as .txt file
+        /// Save the text as .txt or .cs file
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -109,12 +133,14 @@ namespace PrimeEditor
             {
                 SaveFileDialog saveFileDialog = new SaveFileDialog();
                 saveFileDialog.Filter = "Text file (*.txt)|*.txt|C# file(*.cs)|*.cs";
-                saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
                 if (saveFileDialog.ShowDialog() == true)
                 {
+                    string filePath = saveFileDialog.FileName;
+                    AddFilePathToTab(filePath);
 
                     PrimeEditorFile file = new PrimeEditorFile();
-                    file.FilePath = saveFileDialog.FileName;
+                    file.FilePath = filePath;
                     file.Content = textBox.Text;
 
                     File.WriteAllText(file.FilePath, file.Content);
@@ -122,6 +148,16 @@ namespace PrimeEditor
 
                     StatusMessage.Content = $"Datei '{file.FileName}' wurde gespeichert.";
                 }
+            }
+        }
+
+        private void AddFilePathToTab(string filePath)
+        {
+            TabItem selectedTab = (TabItem)tabControl.SelectedItem;
+
+            if (selectedTab != null)
+            {
+                ((TextBoxData)selectedTab.Tag).FilePath = filePath;
             }
         }
 
@@ -181,14 +217,15 @@ namespace PrimeEditor
         {
             if (text.Length == 0)
                 return Array.Empty<string>();
-            string pattern = @"[\s.,;()\[\]'" + "\"?!]+|\t|\n";
+            string pattern = @"[\s" + "\"?!]+|\t|\n";
+            //string pattern = @"[\s.,;()\[\]'" + "\"?!]+|\t|\n";
             return Regex.Split(text, pattern);
         }
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            WordCount.Content = CountWords();
-            CharacterCount.Content = CountCharacters();
+            WordCount.Content = "Words: " + CountWords();
+            CharacterCount.Content = "Characters: " + CountCharacters();
         }
 
         /// <summary>
@@ -215,20 +252,16 @@ namespace PrimeEditor
 
             if (textBox != null)
             {
-                PrimeEditorFile file = new PrimeEditorFile();
-                file.FilePath = textBox.Name;
-                file.Content = textBox.Text;
-
-                if (file.TextWrapping)
+                if (((TextBoxData)textBox.Tag).TextWrapping)
                 {
                     textBox.TextWrapping = TextWrapping.NoWrap;
-                    file.TextWrapping = false;
+                    ((TextBoxData)textBox.Tag).TextWrapping = false;
                     TextWrap.Header = "Enable Text Wrapping";
                 }
                 else
                 {
                     textBox.TextWrapping = TextWrapping.Wrap;
-                    file.TextWrapping = true;
+                    ((TextBoxData)textBox.Tag).TextWrapping = true;
                     TextWrap.Header = "Disable Text Wrapping";
                 }
             }
@@ -371,9 +404,6 @@ namespace PrimeEditor
                 }
             }
             return null; // No tab selected or tab without a valid tag
-
-            //TabItem selectedTab = (TabItem)tabControl.SelectedItem;
-            //return ((TextBoxData)selectedTab.Tag).TabId;
         }
 
         private void SetSelectedTabItemHeader(string header)
@@ -394,7 +424,7 @@ namespace PrimeEditor
                     FilePath = "notSaved",
                     TabId = tabId
                 },
-                Padding = new Thickness(5, 10, 0, 5),
+                Padding = new Thickness(10, 10, 0, 10),
                 Background = Brushes.Black,
                 Foreground = Brushes.White,
                 HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,

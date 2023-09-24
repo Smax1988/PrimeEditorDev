@@ -87,10 +87,9 @@
                 <Label Name="CharacterCount" Width="170" BorderBrush="White" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center">Characters:</Label>
             </StackPanel>
         </StatusBar>
-        <!--SelectionChanged="TabControl_SelectionChanged"-->
-        <TabControl x:Name="tabControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
-            <!--<TabItem Header="+" Style="{StaticResource CustomTabItemStyle}" MouseLeftButtonUp="AddNewTab_Click">
-            </TabItem>-->
+
+        <TabControl x:Name="tabControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SelectionChanged="TabControl_SelectionChanged">
+            <!--Gets added programatically when main window gets constructed-->
         </TabControl>
     </DockPanel>
 </Window>

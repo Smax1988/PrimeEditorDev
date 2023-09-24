@@ -9,6 +9,9 @@ namespace PrimeEditor
     public class TextBoxData
     {
         public string FilePath { get; set; } = string.Empty;
+        
         public string TabId { get; set; } = string.Empty;
+
+        public bool TextWrapping { get; set; } = false;
     }
 }
