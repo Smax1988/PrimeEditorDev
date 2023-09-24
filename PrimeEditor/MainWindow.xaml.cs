@@ -16,9 +16,13 @@ namespace PrimeEditor
     /// </summary>
     public partial class MainWindow : Window
     {
+        private int tabCounter = 1;
+
+
         public MainWindow()
         {
             InitializeComponent();
+            CreateNewTab();
 
             // Set Main Window Icon
             Icon = new BitmapImage(new Uri("../../../Images/edit_text_icon.png", UriKind.RelativeOrAbsolute));
@@ -48,12 +52,13 @@ namespace PrimeEditor
                 PrimeEditorFile file = new PrimeEditorFile();
                 file.FilePath = openFileDialog.FileName;
                 file.Content = File.ReadAllText(file.FilePath);
+                
+                var newTextBox = CreateNewTab();
 
-                TextBox textBox = GetTextEditorTextBox();
-                textBox.Text = file.Content;
-                textBox.Tag = file.FilePath;
+                newTextBox.Text = file.Content;
+                ((TextBoxData)newTextBox.Tag).FilePath = file.FilePath;
 
-                SetTabItemHeader(file.FileName);
+                SetSelectedTabItemHeader(file.FileName);
 
                 // Status Message
                 StatusMessage.Content = $"Datei '{file.FileName}' wurde geöffnet.";
@@ -69,7 +74,7 @@ namespace PrimeEditor
         {
             TextBox textBox = GetTextEditorTextBox();
             PrimeEditorFile file = new PrimeEditorFile();
-            file.FilePath = textBox.Tag.ToString()!;
+            file.FilePath = ((TextBoxData)textBox.Tag).FilePath;
             file.Content = textBox.Text;
 
             if (File.Exists(file.FilePath))
@@ -102,7 +107,7 @@ namespace PrimeEditor
                 file.Content = textBox.Text;
 
                 File.WriteAllText(file.FilePath, file.Content);
-                SetTabItemHeader(file.FileName);
+                SetSelectedTabItemHeader(file.FileName);
 
                 StatusMessage.Content = $"Datei '{file.FileName}' wurde gespeichert.";
             }
@@ -199,12 +204,14 @@ namespace PrimeEditor
             CreateNewTab();
         }
 
-        public void CreateNewTab(string tabName = "New Tab")
+        public TextBox CreateNewTab(string tabName = "New Tab")
         {
             TabItem newTab = new TabItem();
             newTab.Header = tabName;
 
-            TextBox textBox = CreatePrimeEditorTextBox();
+
+            TextBoxData data = new TextBoxData{ TabId = tabCounter++.ToString()};
+            TextBox textBox = CreatePrimeEditorTextBox(data.TabId);
             textBox.TextChanged += TextBox_TextChanged;
 
             newTab.Content = textBox;
@@ -213,53 +220,59 @@ namespace PrimeEditor
             tabControl.Items.Insert((tabControl.Items.Count - 1), newTab);
 
             tabControl.SelectedItem = newTab;
+            
+            return textBox;
         }
 
         private void CloseTab_Click(object sender, RoutedEventArgs e)
         {
-            TextBox textBox = GetTextEditorTextBox(); 
-
-            if (textBox.Text.Length == 0)
+            if (tabControl.Items.Count > 2) 
             {
-                CloseTab(sender);
-            }
-            else
-            {
-                PrimeEditorFile file = new PrimeEditorFile();
-                file.FilePath = textBox.Tag.ToString()!;
-                file.Content = textBox.Text;
+                string selectedTabId = GetSelectedTabId();
+                TextBox textBox = GetTextEditorTextBox();
 
-                string messageBoxText = "You have unsaved changes. Do you wish to save the file?";
-                string caption = "Save";
-                MessageBoxButton button = MessageBoxButton.YesNoCancel;
-                MessageBoxImage icon = MessageBoxImage.Question;
-                MessageBoxResult result;
-
-                string savedText = string.Empty;
-
-                if (file.FilePath != "notSaved")
+                if (textBox.Text.Length == 0)
                 {
-                    savedText = File.ReadAllText(textBox.Tag.ToString()!);
+                    CloseTab(sender);
                 }
-
-                if (file.Content != savedText)
+                else
                 {
-                    result = MessageBox.Show(messageBoxText, caption, button, icon, MessageBoxResult.Yes);
+                    PrimeEditorFile file = new PrimeEditorFile();
+                    file.FilePath = ((TextBoxData)textBox.Tag).FilePath;
+                    file.Content = textBox.Text;
 
-                    switch (result)
+                    string messageBoxText = "You have unsaved changes. Do you wish to save the file?";
+                    string caption = "Save";
+                    MessageBoxButton button = MessageBoxButton.YesNoCancel;
+                    MessageBoxImage icon = MessageBoxImage.Question;
+                    MessageBoxResult result;
+
+                    string savedText = string.Empty;
+
+                    if (file.FilePath != "notSaved" && file.FilePath != "0")
                     {
-                        case MessageBoxResult.Yes:
-                            SaveFile_Click(sender, e);
-                            CloseTab(sender);
-                            break;
-                        case MessageBoxResult.No:
-                            CloseTab(sender);
-                            break;
-                        default:
-                            break;
+                        savedText = File.ReadAllText(((TextBoxData)textBox.Tag).FilePath);
                     }
+
+                    if (file.Content != savedText)
+                    {
+                        result = MessageBox.Show(messageBoxText, caption, button, icon, MessageBoxResult.Yes);
+
+                        switch (result)
+                        {
+                            case MessageBoxResult.Yes:
+                                SaveFile_Click(sender, e);
+                                CloseTab(sender);
+                                break;
+                            case MessageBoxResult.No:
+                                CloseTab(sender);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    else CloseTab(sender);
                 }
-                else CloseTab(sender);
             }
         }
 
@@ -270,10 +283,9 @@ namespace PrimeEditor
                 // Get the TabItem associated with the close button
                 TabItem tabItem = (TabItem)FindParent(closeButton, typeof(TabItem));
 
-
-
                 // Remove the tab from the TabControl
                 tabControl.Items.Remove(tabItem);
+                tabControl.SelectedItem = tabControl.Items[0];
             }
         }
 
@@ -291,6 +303,9 @@ namespace PrimeEditor
 
         private static DependencyObject FindChild(DependencyObject parent, Type childType, int childIndex)
         {
+            var childCount = VisualTreeHelper.GetChildrenCount(parent);
+            if (childCount == 0)
+                return null;
             while (parent != null)
             {
                 var child = VisualTreeHelper.GetChild(parent, childIndex);
@@ -307,20 +322,31 @@ namespace PrimeEditor
             return textBox;
         }
 
-        private void SetTabItemHeader(string header)
+
+        private string GetSelectedTabId()
+        {
+            TabItem selectedTab = (TabItem)tabControl.SelectedItem;
+            return ((TextBoxData)selectedTab.Tag).TabId;
+        }
+
+        private void SetSelectedTabItemHeader(string header)
         {
             TabItem tab = (TabItem)tabControl.SelectedItem;
             tab.Header = header;
         }
 
-        private static TextBox CreatePrimeEditorTextBox()
+        private static TextBox CreatePrimeEditorTextBox(string tabId)
         {
             return new TextBox
             {
                 AcceptsReturn = true,
                 TextWrapping = TextWrapping.NoWrap,
                 FontSize = 16,
-                Tag = "notSaved",
+                Tag = new TextBoxData
+                {
+                    FilePath = "notSaved",
+                    TabId = tabId
+                },
                 Padding = new Thickness(5, 10, 0, 5),
                 Background = Brushes.Black,
                 Foreground = Brushes.White,

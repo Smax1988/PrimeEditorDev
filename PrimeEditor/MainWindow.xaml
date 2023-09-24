@@ -89,9 +89,9 @@
         </StatusBar>
 
         <TabControl x:Name="tabControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <TabItem Header="New Tab" Style="{StaticResource CloseableTabItemStyle}">
-                <TextBox AcceptsReturn="True" Tag="notSaved" TextWrapping="NoWrap" FontSize="16" Padding="5,10,0,5" Background="Black" Foreground="White" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" TextChanged="TextBox_TextChanged" />
-            </TabItem>
+            <!--<TabItem Header="New Tab" Tag="0" Style="{StaticResource CloseableTabItemStyle}">
+                <TextBox AcceptsReturn="True" Tag="0" TextWrapping="NoWrap" FontSize="16" Padding="5,10,0,5" Background="Black" Foreground="White" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" TextChanged="TextBox_TextChanged" />
+            </TabItem>-->
             <TabItem Header="+" Style="{StaticResource CustomTabItemStyle}" MouseLeftButtonUp="AddNewTab_Click">
             </TabItem>
         </TabControl>
