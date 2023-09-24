@@ -9,6 +9,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 
 namespace PrimeEditor
 {
@@ -18,7 +19,7 @@ namespace PrimeEditor
     public partial class MainWindow : Window
     {
         private int tabCounter = 1;
-
+        private readonly DispatcherTimer messageTimer;
 
         public MainWindow()
         {
@@ -27,6 +28,11 @@ namespace PrimeEditor
 
             // Set Main Window Icon
             Icon = new BitmapImage(new Uri("../../../Images/edit_text_icon.png", UriKind.RelativeOrAbsolute));
+            
+            // Init timer for StausMessage disappearance
+            messageTimer = new DispatcherTimer();
+            messageTimer.Interval = TimeSpan.FromSeconds(3);
+            messageTimer.Tick += MessageTimer_Tick;
         }
 
         /// <summary>
@@ -85,8 +91,24 @@ namespace PrimeEditor
                 SetSelectedTabItemHeader(file.FileName);
 
                 // Status Message
-                StatusMessage.Content = $"Datei '{file.FileName}' wurde geöffnet.";
+                SetStatusMessage($"File '{file.FileName}' opened.");
+
             }
+        }
+
+        private void SetStatusMessage(string message)
+        {
+            StatusMessage.Content = message;
+            messageTimer.Start();
+        }
+
+        private void MessageTimer_Tick(object sender, EventArgs e)
+        {
+            // Clear the message content
+            StatusMessage.Content = string.Empty;
+
+            // Stop the timer
+            messageTimer.Stop();
         }
 
         /// <summary>
@@ -111,7 +133,7 @@ namespace PrimeEditor
                 if (File.Exists(file.FilePath))
                 {
                     File.WriteAllText(file.FilePath, file.Content);
-                    StatusMessage.Content = $"Datei '{file.FileName}' wurde gespeichert.";
+                    SetStatusMessage($"File '{file.FileName}' saved.");
                 }
                 else
                 {
@@ -146,7 +168,7 @@ namespace PrimeEditor
                     File.WriteAllText(file.FilePath, file.Content);
                     SetSelectedTabItemHeader(file.FileName);
 
-                    StatusMessage.Content = $"Datei '{file.FileName}' wurde gespeichert.";
+                    SetStatusMessage($"Datei '{file.FileName}' wurde gespeichert.");
                 }
             }
         }

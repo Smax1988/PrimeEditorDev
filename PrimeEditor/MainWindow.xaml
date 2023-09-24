@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:PrimeEditor"
         mc:Ignorable="d"
         Title="Prime Editor" Height="450" Width="900">
-
+   
     <Window.Resources>
         <Style TargetType="TabControl">
             <Setter Property="Background" Value="Black" />
@@ -34,7 +34,10 @@
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="{Binding}" />
-                            <Button Content="X" Width="16" Height="16" Margin="5,0,0,0" Click="CloseTab_Click"/>
+
+                            <Button Width="16" Height="16" Margin="5,0,0,0" Click="CloseTab_Click">
+                                <Image Source="Images/close-button_sm.png" Width="16" Height="16" />
+                            </Button>
                         </StackPanel>
                     </DataTemplate>
                 </Setter.Value>
