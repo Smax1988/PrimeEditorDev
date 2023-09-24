@@ -72,7 +72,8 @@ namespace PrimeEditor
         /// <param name="e"></param>
         private void SaveFile_Click(object sender, RoutedEventArgs e)
         {
-            TextBox textBox = GetTextEditorTextBox();
+            string tabId = GetSelectedTabId();
+            TextBox textBox = GetTextEditorTextBox(tabId);
             PrimeEditorFile file = new PrimeEditorFile();
             file.FilePath = ((TextBoxData)textBox.Tag).FilePath;
             file.Content = textBox.Text;
@@ -100,7 +101,8 @@ namespace PrimeEditor
             saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             if (saveFileDialog.ShowDialog() == true)
             {
-                TextBox textBox = GetTextEditorTextBox();
+                string tabId = GetSelectedTabId();
+                TextBox textBox = GetTextEditorTextBox(tabId);
 
                 PrimeEditorFile file = new PrimeEditorFile();
                 file.FilePath = saveFileDialog.FileName;
@@ -132,7 +134,8 @@ namespace PrimeEditor
         /// <returns></returns>
         private string CountCharacters()
         {
-            TextBox textBox = GetTextEditorTextBox();
+            string tabId = GetSelectedTabId();
+            TextBox textBox = GetTextEditorTextBox(tabId);
             return textBox.Text.Length.ToString();
         }
 
@@ -143,7 +146,8 @@ namespace PrimeEditor
         /// <returns></returns>
         private string CountWords()
         {
-            TextBox textBox = GetTextEditorTextBox();
+            string tabId = GetSelectedTabId();
+            TextBox textBox = GetTextEditorTextBox(tabId);
             string text = textBox.Text.Trim();
             string[] words = GetWords(text);
 
@@ -180,7 +184,8 @@ namespace PrimeEditor
         /// <param name="e"></param>
         private void TextWrap_Click(object sender, RoutedEventArgs e)
         {
-            TextBox textBox = GetTextEditorTextBox();
+            string tabId = GetSelectedTabId();
+            TextBox textBox = GetTextEditorTextBox(tabId);
             PrimeEditorFile file = new PrimeEditorFile();
             file.FilePath = textBox.Name;
             file.Content = textBox.Text;
@@ -215,6 +220,7 @@ namespace PrimeEditor
             textBox.TextChanged += TextBox_TextChanged;
 
             newTab.Content = textBox;
+            newTab.Tag = data;
             newTab.Style = (Style)FindResource("CloseableTabItemStyle");
 
             tabControl.Items.Insert((tabControl.Items.Count - 1), newTab);
@@ -229,7 +235,7 @@ namespace PrimeEditor
             if (tabControl.Items.Count > 2) 
             {
                 string selectedTabId = GetSelectedTabId();
-                TextBox textBox = GetTextEditorTextBox();
+                TextBox textBox = GetTextEditorTextBox(selectedTabId);
 
                 if (textBox.Text.Length == 0)
                 {
@@ -301,27 +307,20 @@ namespace PrimeEditor
             return null;
         }
 
-        private static DependencyObject FindChild(DependencyObject parent, Type childType, int childIndex)
+        private TextBox GetTextEditorTextBox(string tabId)
         {
-            var childCount = VisualTreeHelper.GetChildrenCount(parent);
-            if (childCount == 0)
-                return null;
-            while (parent != null)
+            foreach (TabItem tabItem in tabControl.Items)
             {
-                var child = VisualTreeHelper.GetChild(parent, childIndex);
-                if (child != null && child.GetType() == childType)
-                    return child;
-                parent = child;
+                if (((TextBoxData)(tabItem.Tag)).TabId == tabId)
+                {
+                    if (tabItem.Content is TextBox textBox)
+                    {
+                        return textBox;
+                    }
+                }
             }
-            return null;
+            return null; // TextBox not found
         }
-
-        private TextBox GetTextEditorTextBox()
-        {
-            TextBox textBox = (TextBox)FindChild(tabControl, typeof(TextBox), 0);
-            return textBox;
-        }
-
 
         private string GetSelectedTabId()
         {
