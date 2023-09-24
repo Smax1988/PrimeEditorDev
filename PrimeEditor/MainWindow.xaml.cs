@@ -6,8 +6,8 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace PrimeEditor
 {
@@ -16,9 +16,6 @@ namespace PrimeEditor
     /// </summary>
     public partial class MainWindow : Window
     {
-        private string FilePath { get; set; } = string.Empty;
-        private bool TextWrapping { get; set; } = false;
-
         public MainWindow()
         {
             InitializeComponent();
@@ -34,36 +31,7 @@ namespace PrimeEditor
         /// <param name="e"></param>
         private void NewFile_Click(object sender, RoutedEventArgs e)
         {
-            string messageBoxText = "You have unsaved changes. Do you wish to save the file?";
-            string caption = "Save";
-            MessageBoxButton button = MessageBoxButton.YesNoCancel;
-            MessageBoxImage icon = MessageBoxImage.Question;
-            MessageBoxResult result;
-
-            string editorText = PrimeEditorText.Text;
-            string fileText = string.Empty;
-            
-            if (FilePath != string.Empty)
-                fileText = File.ReadAllText(FilePath);
-
-            if (editorText != fileText)
-            {
-                result = MessageBox.Show(messageBoxText, caption, button, icon, MessageBoxResult.Yes);
-
-                switch (result)
-                {
-                    case MessageBoxResult.Yes:
-                        SaveFile_Click(sender, e);
-                        ResetEditor();
-                        break;
-                    case MessageBoxResult.No:
-                        ResetEditor();
-                        break;
-                    default:
-                        break;
-                }
-            }
-            else ResetEditor();
+            CreateNewTab();
         }
 
         /// <summary>
@@ -77,12 +45,18 @@ namespace PrimeEditor
             openFileDialog.Filter = "Text file (*.txt)|*.txt|C# file(*.cs)|*.cs\"";
             if (openFileDialog.ShowDialog() == true)
             {
-                PrimeEditorText.Text = File.ReadAllText(openFileDialog.FileName);
-                // save filename to local variable
-                FilePath = openFileDialog.FileName;
+                PrimeEditorFile file = new PrimeEditorFile();
+                file.FilePath = openFileDialog.FileName;
+                file.Content = File.ReadAllText(file.FilePath);
+
+                TextBox textBox = GetTextEditorTextBox();
+                textBox.Text = file.Content;
+                textBox.Tag = file.FilePath;
+
+                SetTabItemHeader(file.FileName);
 
                 // Status Message
-                StatusMessage.Content = $"Datei '{FilePath.Split('\\').Last()}' wurde geöffnet.";
+                StatusMessage.Content = $"Datei '{file.FileName}' wurde geöffnet.";
             }
         }
 
@@ -93,10 +67,15 @@ namespace PrimeEditor
         /// <param name="e"></param>
         private void SaveFile_Click(object sender, RoutedEventArgs e)
         {
-            if (File.Exists(FilePath))
+            TextBox textBox = GetTextEditorTextBox();
+            PrimeEditorFile file = new PrimeEditorFile();
+            file.FilePath = textBox.Tag.ToString()!;
+            file.Content = textBox.Text;
+
+            if (File.Exists(file.FilePath))
             {
-                File.WriteAllText(FilePath, PrimeEditorText.Text);
-                StatusMessage.Content = $"Datei '{FilePath.Split('\\').Last()}' wurde gespeichert.";
+                File.WriteAllText(file.FilePath, file.Content);
+                StatusMessage.Content = $"Datei '{file.FileName}' wurde gespeichert.";
             }
             else
             {
@@ -116,11 +95,16 @@ namespace PrimeEditor
             saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             if (saveFileDialog.ShowDialog() == true)
             {
-                File.WriteAllText(saveFileDialog.FileName, PrimeEditorText.Text);
-                // save filename to local variable
-                FilePath = saveFileDialog.FileName;
+                TextBox textBox = GetTextEditorTextBox();
 
-                StatusMessage.Content = $"Datei '{FilePath.Split('\\').Last()}' wurde gespeichert.";
+                PrimeEditorFile file = new PrimeEditorFile();
+                file.FilePath = saveFileDialog.FileName;
+                file.Content = textBox.Text;
+
+                File.WriteAllText(file.FilePath, file.Content);
+                SetTabItemHeader(file.FileName);
+
+                StatusMessage.Content = $"Datei '{file.FileName}' wurde gespeichert.";
             }
         }
 
@@ -143,7 +127,8 @@ namespace PrimeEditor
         /// <returns></returns>
         private string CountCharacters()
         {
-            return PrimeEditorText.Text.Length.ToString();
+            TextBox textBox = GetTextEditorTextBox();
+            return textBox.Text.Length.ToString();
         }
 
 
@@ -153,7 +138,8 @@ namespace PrimeEditor
         /// <returns></returns>
         private string CountWords()
         {
-            string text = PrimeEditorText.Text.Trim();
+            TextBox textBox = GetTextEditorTextBox();
+            string text = textBox.Text.Trim();
             string[] words = GetWords(text);
 
             return words.Length.ToString();
@@ -173,15 +159,6 @@ namespace PrimeEditor
         }
 
         /// <summary>
-        /// Resets the TextBox and FilePath
-        /// </summary>
-        private void ResetEditor()
-        {
-            PrimeEditorText.Text = "";
-            FilePath = string.Empty;
-        }
-
-        /// <summary>
         /// Close the Editor
         /// </summary>
         /// <param name="sender"></param>
@@ -191,7 +168,6 @@ namespace PrimeEditor
             this.Close();
         }
 
-
         /// <summary>
         /// Change the Text Wrap of TextBox
         /// </summary>
@@ -199,45 +175,158 @@ namespace PrimeEditor
         /// <param name="e"></param>
         private void TextWrap_Click(object sender, RoutedEventArgs e)
         {
-            if (TextWrapping)
+            TextBox textBox = GetTextEditorTextBox();
+            PrimeEditorFile file = new PrimeEditorFile();
+            file.FilePath = textBox.Name;
+            file.Content = textBox.Text;
+
+            if (file.TextWrapping)
             {
-                PrimeEditorText.TextWrapping = System.Windows.TextWrapping.NoWrap;
-                TextWrapping = false;
+                textBox.TextWrapping = TextWrapping.NoWrap;
+                file.TextWrapping = false;
                 TextWrap.Header = "Enable Text Wrapping";
             }
             else
             {
-                PrimeEditorText.TextWrapping = System.Windows.TextWrapping.Wrap;
-                TextWrapping = true;
+                textBox.TextWrapping = TextWrapping.Wrap;
+                file.TextWrapping = true;
                 TextWrap.Header = "Disable Text Wrapping";
             }
         }
 
-        private void SearchBar_GotFocus(object sender, RoutedEventArgs e)
+        private void AddNewTab_Click(object sender, MouseButtonEventArgs e)
         {
-            TextBox searchBar = (TextBox)sender;
-            searchBar.Text = "";
+            CreateNewTab();
         }
 
-        private void Searchbar_FocusLost(object sender, KeyboardFocusChangedEventArgs e)
+        public void CreateNewTab(string tabName = "New Tab")
         {
-            SearchBar.Text = "Search...";
+            TabItem newTab = new TabItem();
+            newTab.Header = tabName;
+
+            TextBox textBox = CreatePrimeEditorTextBox();
+            textBox.TextChanged += TextBox_TextChanged;
+
+            newTab.Content = textBox;
+            newTab.Style = (Style)FindResource("CloseableTabItemStyle");
+
+            tabControl.Items.Insert((tabControl.Items.Count - 1), newTab);
+
+            tabControl.SelectedItem = newTab;
         }
 
-        private string[] SearchText(string text, string searchString)
+        private void CloseTab_Click(object sender, RoutedEventArgs e)
         {
-            string[] words = GetWords(text);
-            string[] result = new string[words.Length];
+            TextBox textBox = GetTextEditorTextBox(); 
 
-            for (int i = 0; i < words.Length; i++)
+            if (textBox.Text.Length == 0)
             {
-                if (words[i].Trim() == searchString.Trim())
-                {
-                    result[i] = words[i];
-                }
+                CloseTab(sender);
             }
+            else
+            {
+                PrimeEditorFile file = new PrimeEditorFile();
+                file.FilePath = textBox.Tag.ToString()!;
+                file.Content = textBox.Text;
 
-            return result;
+                string messageBoxText = "You have unsaved changes. Do you wish to save the file?";
+                string caption = "Save";
+                MessageBoxButton button = MessageBoxButton.YesNoCancel;
+                MessageBoxImage icon = MessageBoxImage.Question;
+                MessageBoxResult result;
+
+                string savedText = string.Empty;
+
+                if (file.FilePath != "notSaved")
+                {
+                    savedText = File.ReadAllText(textBox.Tag.ToString()!);
+                }
+
+                if (file.Content != savedText)
+                {
+                    result = MessageBox.Show(messageBoxText, caption, button, icon, MessageBoxResult.Yes);
+
+                    switch (result)
+                    {
+                        case MessageBoxResult.Yes:
+                            SaveFile_Click(sender, e);
+                            CloseTab(sender);
+                            break;
+                        case MessageBoxResult.No:
+                            CloseTab(sender);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                else CloseTab(sender);
+            }
+        }
+
+        private void CloseTab(object sender)
+        {
+            if (sender is Button closeButton)
+            {
+                // Get the TabItem associated with the close button
+                TabItem tabItem = (TabItem)FindParent(closeButton, typeof(TabItem));
+
+
+
+                // Remove the tab from the TabControl
+                tabControl.Items.Remove(tabItem);
+            }
+        }
+
+        private static DependencyObject FindParent(DependencyObject child, Type parentType)
+        {
+            while (child != null)
+            {
+                var parent = VisualTreeHelper.GetParent(child);
+                if (parent != null && parent.GetType() == parentType)
+                    return parent;
+                child = parent;
+            }
+            return null;
+        }
+
+        private static DependencyObject FindChild(DependencyObject parent, Type childType, int childIndex)
+        {
+            while (parent != null)
+            {
+                var child = VisualTreeHelper.GetChild(parent, childIndex);
+                if (child != null && child.GetType() == childType)
+                    return child;
+                parent = child;
+            }
+            return null;
+        }
+
+        private TextBox GetTextEditorTextBox()
+        {
+            TextBox textBox = (TextBox)FindChild(tabControl, typeof(TextBox), 0);
+            return textBox;
+        }
+
+        private void SetTabItemHeader(string header)
+        {
+            TabItem tab = (TabItem)tabControl.SelectedItem;
+            tab.Header = header;
+        }
+
+        private static TextBox CreatePrimeEditorTextBox()
+        {
+            return new TextBox
+            {
+                AcceptsReturn = true,
+                TextWrapping = TextWrapping.NoWrap,
+                FontSize = 16,
+                Tag = "notSaved",
+                Padding = new Thickness(5, 10, 0, 5),
+                Background = Brushes.Black,
+                Foreground = Brushes.White,
+                HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
+                VerticalScrollBarVisibility = ScrollBarVisibility.Auto
+            };
         }
     }
 }

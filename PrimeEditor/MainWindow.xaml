@@ -7,6 +7,41 @@
         mc:Ignorable="d"
         Title="Prime Editor" Height="450" Width="900">
 
+    <Window.Resources>
+        <Style TargetType="TabControl">
+            <Setter Property="Background" Value="Black" />
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+
+        <Style x:Key="CustomTabItemStyle" TargetType="TabItem">
+            <!--<Setter Property="Padding" Value="10,5"/>-->
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Background" Value="White"/>
+            <!-- Define your default appearance here -->
+            <Style.Triggers>
+                <!-- Trigger for the selected (active) tab -->
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="Black"/>
+                    <Setter Property="Foreground" Value="Black"/>
+                    <!-- Define appearance for the selected tab here -->
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="CloseableTabItemStyle" TargetType="TabItem">
+            <Setter Property="HeaderTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding}" />
+                            <Button Content="X" Width="16" Height="16" Margin="5,0,0,0" Click="CloseTab_Click"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
     <Window.CommandBindings>
         <!-- Define command bindings for your shortcuts -->
         <CommandBinding Command="New" Executed="NewFile_Click"/>
@@ -23,7 +58,7 @@
         <KeyBinding Key="Q" Modifiers="Ctrl" Command="Close"/>
     </Window.InputBindings>
 
-    <DockPanel Margin="0,0,0,-4">
+    <DockPanel Margin="0,0,0,-4" Background="#333333">
         <Menu DockPanel.Dock="Top" Background="#333333" Foreground="White" BorderBrush="#333333">
             <MenuItem Header="File" Height="25"  BorderBrush="#333333">
                 <MenuItem Click="NewFile_Click" Header="Neu" InputGestureText="Ctrl+N" Background="#333333" BorderBrush="#333333"/>
@@ -40,9 +75,9 @@
             <MenuItem Header="View" BorderBrush="#333333">
                 <MenuItem Click="TextWrap_Click" Header="Enable Text Wrapping" Name="TextWrap" Background="#333333" BorderBrush="#333333"/>
             </MenuItem>
-            <TextBox Name="SearchBar" GotFocus="SearchBar_GotFocus" Background="White" Foreground="Black" Width="200" Margin="50,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Right" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" UseLayoutRounding="False" LostKeyboardFocus="Searchbar_FocusLost" TextAlignment="Justify">Search...</TextBox>
-
+            <TextBox Name="SearchBar" Background="White" Foreground="Black" Width="200" Margin="50,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Right" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" UseLayoutRounding="False" TextAlignment="Justify"/>
         </Menu>
+
         <StatusBar Height="30" VerticalAlignment="Bottom" DockPanel.Dock="Bottom" Background="#333333">
             <StackPanel Orientation="Horizontal" Height="30" VerticalAlignment="Center" Width="400">
                 <Label Name="StatusMessage" Width="400" BorderBrush="White" Foreground="White" VerticalAlignment="Center" Height="30" HorizontalAlignment="Left" />
@@ -52,6 +87,13 @@
                 <Label Name="CharacterCount" Width="170" BorderBrush="White" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center">Characters:</Label>
             </StackPanel>
         </StatusBar>
-        <TextBox AcceptsReturn="True" TextWrapping="NoWrap" FontSize="16" Padding="5,10,0,5" Name="PrimeEditorText" Background="Black" Foreground="White" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" TextChanged="TextBox_TextChanged" />
+
+        <TabControl x:Name="tabControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <TabItem Header="New Tab" Style="{StaticResource CloseableTabItemStyle}">
+                <TextBox AcceptsReturn="True" Tag="notSaved" TextWrapping="NoWrap" FontSize="16" Padding="5,10,0,5" Background="Black" Foreground="White" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" TextChanged="TextBox_TextChanged" />
+            </TabItem>
+            <TabItem Header="+" Style="{StaticResource CustomTabItemStyle}" MouseLeftButtonUp="AddNewTab_Click">
+            </TabItem>
+        </TabControl>
     </DockPanel>
 </Window>
