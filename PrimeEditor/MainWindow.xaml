@@ -56,7 +56,7 @@
 
     <Window.InputBindings>
         <!-- Bind the shortcuts to the commands -->
-        <KeyBinding Key="N" Modifiers="Ctrl" Command="New"/>
+        <KeyBinding Key="N" Modifiers="Ctrl"  Command="New"/>
         <KeyBinding Key="O" Modifiers="Ctrl" Command="Open"/>
         <KeyBinding Key="S" Modifiers="Ctrl" Command="Save"/>
         <KeyBinding Key="Q" Modifiers="Ctrl" Command="Close"/>
@@ -77,7 +77,7 @@
                 <MenuItem Header="Background Color" Background="#333333" BorderBrush="#333333"/>
             </MenuItem>
             <MenuItem Header="View" BorderBrush="#333333">
-                <MenuItem Click="TextWrap_Click" Header="Enable Text Wrapping" Name="TextWrap" Background="#333333" BorderBrush="#333333"/>
+                <MenuItem Click="TextWrap_Click" Header="Toggle Text Wrapping" Name="TextWrap" Background="#333333" BorderBrush="#333333"/>
             </MenuItem>
             <!--<TextBox Name="SearchBar" Background="White" Foreground="Black" Width="200" Margin="50,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Right" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" UseLayoutRounding="False" TextAlignment="Justify"/>-->
         </Menu>
