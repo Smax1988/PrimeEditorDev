@@ -275,7 +275,6 @@ namespace PrimeEditor
         /// <param name="e"></param>
         private void TextWrap_Click(object sender, RoutedEventArgs e)
         {
-            //TODO: buggy
             string tabId = GetSelectedTabId();
             TextBox textBox = GetTextEditorTextBox(tabId);
 
