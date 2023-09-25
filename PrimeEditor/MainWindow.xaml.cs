@@ -78,7 +78,6 @@ namespace PrimeEditor
                     return;
                 }
 
-
                 PrimeEditorFile file = new PrimeEditorFile();
                 file.FilePath = openFileDialog.FileName;
                 file.Content = File.ReadAllText(file.FilePath);
