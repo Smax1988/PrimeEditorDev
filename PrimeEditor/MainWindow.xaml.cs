@@ -440,55 +440,6 @@ public partial class MainWindow : Window
         }
         return null;
     }
-    #endregion
-
-    #region Miscellaneous
-    /// <summary>
-    /// Gets the TextBox by Id of the currently selected tab. Every tab and its textbox
-    /// have the same id.
-    /// </summary>
-    /// <param name="tabId">The Id of the currently selected tab</param>
-    /// <returns>Found TextBox</returns>
-    private TextBox GetTextEditorTextBox(string tabId)
-    {
-        foreach (TabItem tabItem in tabControl.Items)
-        {
-            if (((TextBoxData)(tabItem.Tag)).TabId == tabId)
-            {
-                if (tabItem.Content is TextBox textBox)
-                {
-                    return textBox;
-                }
-            }
-        }
-        return null!; // TextBox not found
-    }
-
-    /// <summary>
-    /// Gets the currently selected TabItem's Id
-    /// </summary>
-    /// <returns>Selected TabItem Id</returns>
-    private string GetSelectedTabId()
-    {
-        if (tabControl.SelectedItem is TabItem selectedTab)
-        {
-            if (((TextBoxData)selectedTab.Tag).TabId is string tabId)
-            {
-                return tabId;
-            }
-        }
-        return null; // No tab selected or tab without a valid tag
-    }
-
-    /// <summary>
-    /// Sets the text of the StatusMessage element at the bottom of the UI
-    /// </summary>
-    /// <param name="message">Message to be displayed in the Statusbar</param>
-    private void SetStatusMessage(string message)
-    {
-        StatusMessage.Content = message;
-        messageTimer.Start();
-    }
 
     /// <summary>
     /// Set the Header of the selectedTabItem
