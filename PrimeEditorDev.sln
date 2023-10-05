@@ -5,7 +5,7 @@ VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrimeEditor", "PrimeEditor\PrimeEditor.csproj", "{1E34C427-76C2-453C-88CA-EB3E42FB08FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextEditorLib", "TextEditorLib\TextEditorLib.csproj", "{DAC9F001-5C1C-422F-B8D1-BAA2E4D1769C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextEditorLib", "TextEditor\TextEditorLib.csproj", "{AF87966E-541B-4EDC-AEEC-E38AC15CC25B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{1E34C427-76C2-453C-88CA-EB3E42FB08FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E34C427-76C2-453C-88CA-EB3E42FB08FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E34C427-76C2-453C-88CA-EB3E42FB08FA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DAC9F001-5C1C-422F-B8D1-BAA2E4D1769C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DAC9F001-5C1C-422F-B8D1-BAA2E4D1769C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DAC9F001-5C1C-422F-B8D1-BAA2E4D1769C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DAC9F001-5C1C-422F-B8D1-BAA2E4D1769C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF87966E-541B-4EDC-AEEC-E38AC15CC25B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF87966E-541B-4EDC-AEEC-E38AC15CC25B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF87966E-541B-4EDC-AEEC-E38AC15CC25B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF87966E-541B-4EDC-AEEC-E38AC15CC25B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
