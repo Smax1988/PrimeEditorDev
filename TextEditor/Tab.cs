@@ -7,10 +7,11 @@ using System.Windows.Controls;
 using System.Windows;
 using TextEditorLib.Models;
 using System.Windows.Media;
+using System.Windows.Input;
 
 namespace TextEditorLib
 {
-    internal class Tab : TextEditorBase
+    public class Tab : TextEditorBase
     {
         /// <summary>
         /// Creates a new Tab and sets the Tag property to TextBoxData for data binding
@@ -51,6 +52,7 @@ namespace TextEditorLib
                 ((TextBoxData)selectedTab.Tag).FilePath = filePath;
             }
         }
+
 
         /// <summary>
         /// Closes a Tab by removing it from tabControl

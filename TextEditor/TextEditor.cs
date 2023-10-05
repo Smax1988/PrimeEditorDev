@@ -14,6 +14,11 @@ namespace TextEditorLib
 {
     public class TextEditor : TextEditorBase
     {
+        /// <summary>
+        /// Open a .txt or .cs file. File only opened, if not already opened
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void OpenFile(TabControl tabControl, Label messageContainer, DispatcherTimer messageTimer, int tabCounter, TextChangedEventHandler textChangedEventHandler, Style closableTabItemStyle)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -45,17 +50,70 @@ namespace TextEditorLib
             }
         }
 
-        public void SaveFile()
+        /// <summary>
+        /// Saves an already opened file or navigates to "Save As" method
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void SaveFile(TabControl tabControl, Label messageContainer, DispatcherTimer messageTimer)
         {
+            string tabId = GetSelectedTabId(tabControl);
+            TextBox textBox = GetTextEditorTextBox(tabId, tabControl);
+            PrimeEditorFile file = new PrimeEditorFile();
 
+            if (textBox != null)
+            {
+                string filePath = ((TextBoxData)textBox.Tag).FilePath;
+                Tab.AddFilePathToTab(filePath, tabControl);
+
+                file.FilePath = filePath;
+                file.Content = textBox.Text;
+
+                if (File.Exists(file.FilePath))
+                {
+                    File.WriteAllText(file.FilePath, file.Content);
+                    SetStatusMessage($"File '{file.FileName}' saved.", messageContainer, messageTimer);
+                }
+                else
+                    SaveFileAs(tabControl, messageContainer, messageTimer);
+            }
+        }
+
+        /// <summary>
+        /// Save the text as .txt or .cs file
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void SaveFileAs(TabControl tabControl, Label messageContainer, DispatcherTimer messageTimer)
+        {
+            string tabId = GetSelectedTabId(tabControl);
+            TextBox textBox = GetTextEditorTextBox(tabId, tabControl);
+            if (textBox != null)
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "Text file (*.txt)|*.txt|C# file(*.cs)|*.cs";
+                saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    string filePath = saveFileDialog.FileName;
+                    Tab.AddFilePathToTab(filePath, tabControl);
+
+                    PrimeEditorFile file = new PrimeEditorFile();
+                    file.FilePath = filePath;
+                    file.Content = textBox.Text;
+
+                    File.WriteAllText(file.FilePath, file.Content);
+                    SetSelectedTabItemHeader(file.FileName, tabControl);
+
+                    SetStatusMessage($"Datei '{file.FileName}' wurde gespeichert.", messageContainer, messageTimer);
+                }
+            }
         }
 
         public TextBox CreateNewTab(int tabCounter, TabControl tabControl, TextChangedEventHandler textChangedEventHandler, Style closableTabItemStyle, string tabName = "New Tab")
         {
             return Tab.CreateNewTab(tabCounter, tabControl, textChangedEventHandler, closableTabItemStyle);
         }
-
-
 
         /// <summary>
         /// Determines if a file is already opened

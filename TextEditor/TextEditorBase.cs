@@ -19,7 +19,7 @@ namespace TextEditorLib
         /// </summary>
         /// <param name="tabId">The Id of the currently selected tab</param>
         /// <returns>Found TextBox</returns>
-        protected TextBox GetTextEditorTextBox(string tabId, TabControl tabControl)
+        public static TextBox GetTextEditorTextBox(string tabId, TabControl tabControl)
         {
             foreach (TabItem tabItem in tabControl.Items)
             {
@@ -38,7 +38,7 @@ namespace TextEditorLib
         /// Gets the currently selected TabItem's Id
         /// </summary>
         /// <returns>Selected TabItem Id</returns>
-        protected string GetSelectedTabId(TabControl tabControl)
+        public static string GetSelectedTabId(TabControl tabControl)
         {
             if (tabControl.SelectedItem is TabItem selectedTab)
             {
