@@ -21,7 +21,6 @@ public partial class MainWindow : Window
     private int tabCounter = 1;
     private readonly DispatcherTimer messageTimer;
     private readonly TextEditor editor = new TextEditor();
-    private Style tabItemStyle = (Style) FindResource("CloseableTabItemStyle")
 
     public MainWindow()
     {
@@ -45,7 +44,7 @@ public partial class MainWindow : Window
     /// <param name="e"></param>
     private void NewFile_Click(object sender, RoutedEventArgs e)
     {
-        TextEditor.CreateNewTab(tabCounter, tabControl, TextBox_TextChanged, (Style)FindResource("CloseableTabItemStyle"));
+        editor.CreateNewTab(tabCounter, tabControl, TextBox_TextChanged, (Style)FindResource("CloseableTabItemStyle"));
     }
 
     /// <summary>

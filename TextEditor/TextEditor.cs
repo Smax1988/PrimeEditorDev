@@ -14,7 +14,7 @@ namespace TextEditorLib
 {
     public class TextEditor : TextEditorBase
     {
-        public void OpenFile(TabControl tabControl, Label messageContainer, DispatcherTimer messageTimer)
+        public void OpenFile(TabControl tabControl, Label messageContainer, DispatcherTimer messageTimer, int tabCounter, TextChangedEventHandler textChangedEventHandler, Style closableTabItemStyle)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Text file (*.txt)|*.txt|C# file(*.cs)|*.cs\"";
@@ -33,7 +33,7 @@ namespace TextEditorLib
                 file.FilePath = openFileDialog.FileName;
                 file.Content = File.ReadAllText(file.FilePath);
 
-                var newTextBox = CreateNewTab();
+                var newTextBox = CreateNewTab(tabCounter, tabControl, textChangedEventHandler, closableTabItemStyle);
 
                 newTextBox.Text = file.Content;
                 ((TextBoxData)newTextBox.Tag).FilePath = file.FilePath;
@@ -43,8 +43,20 @@ namespace TextEditorLib
                 // Status Message
                 SetStatusMessage($"File '{file.FileName}' opened.", messageContainer, messageTimer);
             }
+        }
+
+        public void SaveFile()
+        {
 
         }
+
+        public TextBox CreateNewTab(int tabCounter, TabControl tabControl, TextChangedEventHandler textChangedEventHandler, Style closableTabItemStyle, string tabName = "New Tab")
+        {
+            return Tab.CreateNewTab(tabCounter, tabControl, textChangedEventHandler, closableTabItemStyle);
+        }
+
+
+
         /// <summary>
         /// Determines if a file is already opened
         /// </summary>
