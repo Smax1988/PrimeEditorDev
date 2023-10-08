@@ -16,7 +16,12 @@ namespace TextEditorLib
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void OpenFile(TabControl tabControl, Label messageContainer, DispatcherTimer messageTimer, int tabCounter, TextChangedEventHandler textChangedEventHandler, Style closableTabItemStyle)
+        public void OpenFile(TabControl tabControl, 
+                             Label messageContainer, 
+                             DispatcherTimer messageTimer, 
+                             int tabCounter, 
+                             TextChangedEventHandler textChangedEventHandler, 
+                             Style closableTabItemStyle)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Text file (*.txt)|*.txt|C# file(*.cs)|*.cs\"";
