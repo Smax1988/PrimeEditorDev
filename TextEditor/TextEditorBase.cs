@@ -75,7 +75,7 @@ namespace TextEditorLib
         /// properties.
         /// </summary>
         /// <param name="tabId">Textbox will belong to the tab with this Id</param>
-        /// <returns></returns>
+        /// <returns>TextBox</returns>
         protected static TextBox CreatePrimeEditorTextBox(string tabId)
         {
             return new TextBox
