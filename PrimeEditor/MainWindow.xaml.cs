@@ -1,12 +1,8 @@
-﻿using Microsoft.Win32;
-using System;
+﻿using System;
 using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using TextEditorLib;
@@ -46,7 +42,6 @@ public partial class MainWindow : Window
     {
         editor.CreateNewTab(tabCounter, tabControl, TextBox_TextChanged, (Style)FindResource("CloseableTabItemStyle"));
     }
-
 
     private void OpenFile_Click(object sender, RoutedEventArgs e)
     {
@@ -134,7 +129,7 @@ public partial class MainWindow : Window
 
     #region Tabs
     /// <summary>
-    /// Event Handler when AddNewTab Button is clicked
+    /// Event when AddNewTab Button is clicked
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -143,9 +138,8 @@ public partial class MainWindow : Window
         editor.CreateNewTab(tabCounter, tabControl, TextBox_TextChanged, (Style)FindResource("CloseableTabItemStyle"));
     }
 
-
     /// <summary>
-    /// Event Handler: when Close Tab Button is clicked. Asks the user for confirmation
+    /// Event when Close Tab Button is clicked. Asks the user for confirmation
     /// if file has unsaved changes.
     /// </summary>
     /// <param name="sender"></param>
@@ -207,7 +201,6 @@ public partial class MainWindow : Window
         TabItem tabItem = new TabItem
         {
             Header = "+",
-            Style = (Style)FindResource("CloseableTabItemStyle"),
             Tag = new TextBoxData { TabId = tabCounter++.ToString() }
         };
         tabItem.MouseLeftButtonUp += AddNewTab_Click;

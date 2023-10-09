@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Windows;
-using TextEditorLib.Models;
+using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Input;
+using TextEditorLib.Models;
 
 namespace TextEditorLib
 {
@@ -23,7 +18,7 @@ namespace TextEditorLib
             TabItem newTab = new TabItem();
             newTab.Header = tabName;
 
-            TextBoxData data = new TextBoxData { TabId = tabCounter++.ToString() };
+            TextBoxData data = new TextBoxData { TabId = (tabCounter++).ToString() };
             TextBox textBox = CreatePrimeEditorTextBox(data.TabId);
             textBox.TextChanged += textChangedEventHandler;
 
